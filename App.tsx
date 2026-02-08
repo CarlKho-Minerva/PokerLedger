@@ -58,6 +58,18 @@ export default function App() {
   const [editingSession, setEditingSession] = useState<GameSession | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const settingsRef = useRef<HTMLDivElement>(null);
+
+  // Close settings when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+        setShowSettings(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const addPlayer = (player: Player) => {
     saveAndRecalculate([...players, player], sessions);
@@ -303,16 +315,16 @@ export default function App() {
         {/* Header - Fixed */}
         <header className="flex justify-between items-center p-4 bg-zinc-950/80 backdrop-blur-md z-40 border-b border-zinc-800 shrink-0">
           <div className="font-bold text-emerald-500">PokerLedger</div>
-          <div className="relative">
+          <div className="relative" ref={settingsRef}>
              <button onClick={() => setShowSettings(!showSettings)} className="p-2 text-zinc-400 hover:text-white transition">
                <Settings size={20} />
              </button>
              {showSettings && (
                <div className="absolute right-0 top-full mt-2 w-48 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl p-2 flex flex-col gap-1 z-50">
-                 <button onClick={handleExport} className="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg text-sm text-left">
+                 <button onClick={handleExport} className="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg text-sm text-left w-full">
                    <Download size={16} /> Export JSON
                  </button>
-                 <button onClick={handleImportClick} className="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg text-sm text-left">
+                 <button onClick={handleImportClick} className="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg text-sm text-left w-full">
                    <Upload size={16} /> Import JSON
                  </button>
                  <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept=".json" />
