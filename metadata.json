@@ -1,0 +1,5 @@
+{
+  "name": "PokerLedger",
+  "description": "A friendly, lightweight poker tracking app for university clubs. Tracks buy-ins, cash-outs, and calculates settlements automatically with a fun, face-filled UI.",
+  "requestFramePermissions": []
+}
